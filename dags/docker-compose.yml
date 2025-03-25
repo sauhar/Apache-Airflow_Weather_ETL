@@ -1,0 +1,19 @@
+#name should be docker-compose.yml (i.e. - for docker compose other wise we to specify the custom file name when running Docker Compose commands, using the -f option)
+
+version: '3'
+services:
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: database
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+      #keep the backup of data if the flow got canceled
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
