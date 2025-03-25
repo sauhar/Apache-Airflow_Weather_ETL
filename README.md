@@ -1,48 +1,105 @@
-Overview
-========
+# End-to-End ETL Pipeline with Apache Airflow and Astro
 
-Welcome to Astronomer! This project was generated after you ran 'astro dev init' using the Astronomer CLI. This readme describes the contents of the project, as well as how to run Apache Airflow on your local machine.
+## Project Overview
 
-Project Contents
-================
+This project demonstrates how to build an **End-to-End ETL (Extract, Transform, Load) Pipeline** using **Apache Airflow** and **Astronomer Astro**. The pipeline automates data extraction, transformation, and loading processes, making data workflows efficient and scalable.
 
-Your Astro project contains the following files and folders:
+## Features
 
-- dags: This folder contains the Python files for your Airflow DAGs. By default, this directory includes one example DAG:
-    - `example_astronauts`: This DAG shows a simple ETL pipeline example that queries the list of astronauts currently in space from the Open Notify API and prints a statement for each astronaut. The DAG uses the TaskFlow API to define tasks in Python, and dynamic task mapping to dynamically print a statement for each astronaut. For more on how this DAG works, see our [Getting started tutorial](https://www.astronomer.io/docs/learn/get-started-with-airflow).
-- Dockerfile: This file contains a versioned Astro Runtime Docker image that provides a differentiated Airflow experience. If you want to execute other commands or overrides at runtime, specify them here.
-- include: This folder contains any additional files that you want to include as part of your project. It is empty by default.
-- packages.txt: Install OS-level packages needed for your project by adding them to this file. It is empty by default.
-- requirements.txt: Install Python packages needed for your project by adding them to this file. It is empty by default.
-- plugins: Add custom or community plugins for your project to this file. It is empty by default.
-- airflow_settings.yaml: Use this local-only file to specify Airflow Connections, Variables, and Pools instead of entering them in the Airflow UI as you develop DAGs in this project.
+- **Automated Workflow Orchestration** with Apache Airflow
+- **Integration with Astronomer Astro** for deployment and execution
+- **Modular ETL Process** (Extract, Transform, Load)
+- **Error Handling and Logging** for robust execution
+- **Scalability** to accommodate growing data pipelines
 
-Deploy Your Project Locally
-===========================
+## Technologies Used
 
-1. Start Airflow on your local machine by running 'astro dev start'.
+- **Apache Airflow** (Orchestration)
+- **Astronomer Astro** (Airflow deployment & management)
+- **Python** (ETL scripting)
+- **PostgreSQL / Any Database** (Data Storage)
+- **Docker** (Containerization)
+- **Cloud Storage (Optional)** (For scalability)
 
-This command will spin up 4 Docker containers on your machine, each for a different Airflow component:
+## Installation and Setup
 
-- Postgres: Airflow's Metadata Database
-- Webserver: The Airflow component responsible for rendering the Airflow UI
-- Scheduler: The Airflow component responsible for monitoring and triggering tasks
-- Triggerer: The Airflow component responsible for triggering deferred tasks
+### Prerequisites
 
-2. Verify that all 4 Docker containers were created by running 'docker ps'.
+Ensure you have the following installed on your system:
 
-Note: Running 'astro dev start' will start your project with the Airflow Webserver exposed at port 8080 and Postgres exposed at port 5432. If you already have either of those ports allocated, you can either [stop your existing Docker containers or change the port](https://www.astronomer.io/docs/astro/cli/troubleshoot-locally#ports-are-not-available-for-my-local-airflow-webserver).
+- Python (>=3.8)
+- Docker
+- Astronomer CLI
+- PostgreSQL (or any supported database)
 
-3. Access the Airflow UI for your local Airflow project. To do so, go to http://localhost:8080/ and log in with 'admin' for both your Username and Password.
+### Step 1: Clone the Repository
 
-You should also be able to access your Postgres Database at 'localhost:5432/postgres'.
+```bash
+git clone <repository-url>
+cd apache-airflow-etl
+```
 
-Deploy Your Project to Astronomer
-=================================
+### Step 2: Install Dependencies
 
-If you have an Astronomer account, pushing code to a Deployment on Astronomer is simple. For deploying instructions, refer to Astronomer documentation: https://www.astronomer.io/docs/astro/deploy-code/
+Create a virtual environment and install required packages:
 
-Contact
-=======
+```bash
+python -m venv venv
+source venv/bin/activate  # For macOS/Linux
+venv\Scripts\activate  # For Windows
+pip install -r requirements.txt
+```
 
-The Astronomer CLI is maintained with love by the Astronomer team. To report a bug or suggest a change, reach out to our support.
+### Step 3: Start Airflow with Astro
+
+Initialize and start an Astro project(https://www.astronomer.io/docs/astro/cli/overview):
+
+```bash
+astro dev init  # Initialize Astro project
+astro dev start  # Start Airflow locally
+```
+
+### Step 4: Set Up Database Connection
+
+Modify the `airflow.cfg` file or set environment variables to configure your database connection:
+
+```bash
+export AIRFLOW_CONN_DATABASE_URL='postgresql://user:password@localhost:5432/mydatabase'
+```
+
+### Step 5: Deploy the DAGs
+
+Place your DAG files inside the `dags/` directory. Restart Airflow to recognize new DAGs:
+
+```bash
+astro dev restart
+```
+
+## Usage
+
+1. **Access Airflow UI**: Open [http://localhost:8080](http://localhost:8080) and log in with default credentials (`airflow` / `airflow`).
+2. **Enable DAG**: Navigate to the DAGs section and enable the ETL pipeline.
+3. **Trigger DAG**: Click "Trigger DAG" to start the ETL process.
+4. **Monitor Execution**: Check logs and execution status from the UI.
+
+## Project Structure
+
+```
+├── dags/
+│   ├── etl_pipeline.py  # Main DAG script
+│   ├── extract.py  # Data extraction logic
+│   ├── transform.py  # Data transformation logic
+│   ├── load.py  # Data loading logic
+├── plugins/
+├── Dockerfile
+├── requirements.txt
+├── airflow.cfg
+└── README.md
+```
+
+## DAG Workflow
+
+1. **Extract**: Fetch data from an external source (API, database, etc.).
+2. **Transform**: Clean, filter, and process data.
+3. **Load**: Store the transformed data into a database or cloud storage.
+
